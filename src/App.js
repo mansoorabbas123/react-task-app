@@ -11,24 +11,19 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const getData = async () => {
-    try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/todos')
-      const data = await response.json()
-      const tasks = data.map(task => task.title);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-    catch
-    {
-      alert("there occurs an error")
-    }
+
+    const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+    const data = await response.json()
+    const tasks = await data.map(task => task.title);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   }
-
   useEffect(() => {
-
-    if (localStorage.getItem('tasks') === null) {
-      getData();
-    }
-    setTodoList(JSON.parse(localStorage.getItem('tasks')));
+    (async function () {
+      if (localStorage.getItem('tasks') === null) {
+        await getData();
+      }
+      setTodoList(JSON.parse(localStorage.getItem('tasks')));
+    })();
 
   }, [])
 
@@ -85,7 +80,6 @@ function App() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
